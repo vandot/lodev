@@ -1,5 +1,5 @@
 # lodev
-lodev is as simple proxy server for local development with SSL termination.
+lodev is a simple reverse proxy server for local development with SSL termination.
 
 Obsoletes using ngrok or manually configuring combination of mkcert, dnsmasq and nginx/caddy. It provides HTTPS endpoint under `https://dev.lo` and by default proxies all requests to `http://127.0.0.1:3000`.
 
