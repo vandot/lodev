@@ -2,7 +2,7 @@
 
 version       = "0.1.0"
 author        = "vandot"
-description   = "Simple proxy server for local development"
+description   = "Simple reverse proxy server for local development"
 license       = "MIT"
 srcDir        = "src"
 bin           = @["lodev"]
