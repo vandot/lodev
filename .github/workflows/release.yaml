@@ -1,0 +1,42 @@
+name: Release
+
+on:
+  push:
+    branches-ignore:
+      - '**'
+    tags:
+      - '*.*.*'
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Install Nim
+        uses: iffy/install-nim@v4.2.0
+      - name: Install nimxc
+        run: |
+          nimble install -y https://github.com/iffy/nimxc.git
+      - name: Build Linux
+        run: |
+          nimble build -r -d:release --opt:size
+          mv build/lodev{,-linux-amd64}
+      - name: Build Darwin
+        run: |
+          nimxc c --target=macosx-arm64 -d:release -d:NimblePkgVersion:$(nimble --silent version) --opt:size --out:./build/lodev-darwin-arm64 -f src/lodev.nim
+          nimxc c --target=macosx-amd64 -d:release -d:NimblePkgVersion:$(nimble --silent version) --opt:size --out:./build/lodev-darwin-amd64 -f src/lodev.nim
+      - name: Build Windows
+        run: |
+          nimxc c --target=windows-amd64 -d:release -d:NimblePkgVersion:$(nimble --silent version) --opt:size --out:./build/lodev-windows-amd64.exe -f src/lodev.nim
+      - name: Create packages
+        run: |
+          tar czf ./build/lodev-linux-amd64.tar.gz --directory=./build lodev-linux-amd64
+          tar czf ./build/lodev-darwin-amd64.tar.gz --directory=./build lodev-darwin-amd64
+          tar czf ./build/lodev-darwin-arm64.tar.gz --directory=./build lodev-darwin-arm64
+          7z a ./build/lodev-windows-amd64.zip ./build/lodev-windows-amd64.exe
+      - name: Publish release
+        uses: softprops/action-gh-release@v1
+        if: success()
+        with:
+          files: build/*
