@@ -16,8 +16,8 @@ skipDirs = @[
 # Dependencies
 requires "nim >= 1.6.6"
 requires "chronos"
-requires "https://github.com/vandot/lodns#head"
-requires "https://github.com/vandot/locert#head"
+requires "lodns"
+requires "locert"
 
 # Tasks
 proc updateNimbleVersion(ver: string) =
