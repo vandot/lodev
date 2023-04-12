@@ -1,7 +1,7 @@
 # lodev
 lodev is a simple reverse proxy server for local development with SSL termination.
 
-Obsoletes using ngrok or manually configuring combination of mkcert, dnsmasq and nginx/caddy. It provides HTTPS endpoint under `https://dev.lo` and by default proxies all requests to `http://127.0.0.1:3000`.
+Obsoletes using ngrok or manually configuring combination of mkcert, dnsmasq and nginx/caddy. It provides HTTPS endpoint under `https://*.dev.lo` and by default proxies all requests to `http://127.0.0.1:3000`.
 
 It uses [locert](https://github.com/vandot/locert) to generate and install locally trusted SSL certs and [lodns](https://github.com/vandot/lodns) for DNS name resolution.
 
@@ -15,11 +15,11 @@ Download correct binary from the latest [release](https://github.com/vandot/lode
 Or `nimble install lodev`
 
 ## Configuration
-lodev comes preconfigured for all supported platforms to act as a HTTPS reverse proxy server behind `dev.lo` domain.
+lodev comes preconfigured for all supported platforms to act as a HTTPS reverse proxy server behind `*.dev.lo` domain.
 
-On MacOS and Linux you have to run with `sudo` to be able to configure the system
+On MacOS and Linux it will ask for sudo password
 ```
-sudo lodev install
+lodev install
 ```
 On Windows run inside elevated command prompt or Powershell
 ```
@@ -27,11 +27,16 @@ lodev.exe install
 ```
 
 ## Start
-Service must be started with elevated priviledges because it will bind to a well-known port `443`. By default service will proxy all requests to `127.0.0.1:3000`. You can specify different destination port using `-p=8000`.
+Service will bind to a well-known port `443`. By default service will proxy all requests to `127.0.0.1:3000`. You can specify different destination port using `-p=8000`.
+
+On Linux add CAP_NET_BIND_SERVICE capability to the lodev binary to able to bind port 443 as a non-root user.
+```
+sudo setcap cap_net_bind_service=+eip lodev
+```
 
 On MacOS and Linux
 ```
-sudo lodev start
+lodev start
 ```
 On Windows inside elevated command prompt or Powershell
 ```
@@ -41,7 +46,7 @@ lodev.exe start
 ## Uninstallation
 On MacOS and Linux run 
 ```
-sudo lodev uninstall
+lodev uninstall
 ```
 On Windows run inside elevated command prompt or Powershell
 ```

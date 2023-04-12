@@ -1,6 +1,6 @@
 # Package
 
-version       = "0.1.0"
+version       = "0.1.1"
 author        = "vandot"
 description   = "Simple reverse proxy server for local development"
 license       = "MIT"
