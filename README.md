@@ -12,7 +12,14 @@ As described in [locert](https://github.com/vandot/locert) docs, to enable suppo
 ## Installation
 Download correct binary from the latest [release](https://github.com/vandot/lodev/releases) and place it somewhere in the PATH.
 
-Or `nimble install lodev`
+Or pipe the install script to bash
+```
+curl -sSfL https://raw.githubusercontent.com/vandot/lodev/main/install.sh | bash
+```
+Or build it locally
+```
+nimble install lodev
+```
 
 ## Configuration
 lodev comes preconfigured for all supported platforms to act as a HTTPS reverse proxy server behind `*.dev.lo` domain.
