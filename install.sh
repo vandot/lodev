@@ -29,7 +29,7 @@ detect_os() {
   OS=$(uname|tr '[:upper:]' '[:lower:]')
 
   case "$OS" in
-    # Minimalist GNU for Windows
+    # minimalist GNU for Windows.
     mingw*) OS='windows';;
   esac
 }
@@ -43,6 +43,7 @@ run_as_root() {
   $CMD
 }
 
+# check if local machine OS and arch matches list of supported ones.
 supported() {
   if ! echo "${SUPPORTED_ARCH}" | grep -q "${OS}-${ARCH}"; then
     if [ $OS == "windows" ]; then
@@ -79,12 +80,13 @@ check_installed_version() {
   fi
 }
 
-# check_tag_provided checks whether TAG has provided as an environment variable so we can skip check_latest_version.
+# check_tag_provided checks whether TAG has provided as an environment variable
+# so we can skip check_latest_version.
 check_tag_provided() {
   [[ ! -z "$TAG" ]]
 }
 
-# check_latest_version grabs the latest version string from the releases
+# check_latest_version grabs the latest version string from the releases.
 check_latest_version() {
   local latest_release_url="$REPO_URL/releases/latest"
   if command -v curl &> /dev/null; then
@@ -145,7 +147,7 @@ test_binary() {
   echo "Run '$APP_NAME $HELP_ARG' to see what you can do with it."
 }
 
-# help provides possible cli installation arguments
+# help provides possible cli installation arguments.
 help () {
   echo "Accepted cli arguments are:"
   echo -e " [--tag|-t vx.x.x] ->> install this tag"
@@ -153,20 +155,20 @@ help () {
   echo -e " [--no-sudo] ->> install without sudo"
 }
 
-# cleanup temporary files
+# cleanup temporary files.
 cleanup() {
   if [[ -d "${APP_TMP_ROOT:-}" ]]; then
     rm -rf "$APP_TMP_ROOT"
   fi
 }
 
-# Execution
+# execution
 
-#Stop execution on any error
+# stop execution on any error.
 trap "fail_trap" EXIT
 set -e
 
-# Parsing input arguments (if any)
+# parsing input arguments (if any).
 export INPUT_ARGUMENTS="${@}"
 set -u
 while [[ $# -gt 0 ]]; do
