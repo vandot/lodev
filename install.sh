@@ -148,7 +148,7 @@ test_binary() {
 # help provides possible cli installation arguments
 help () {
   echo "Accepted cli arguments are:"
-  echo -e " [--version|-v x.x.x] ->> install this version"
+  echo -e " [--tag|-t vx.x.x] ->> install this tag"
   echo -e " [--help|-h] ->> prints this help"
   echo -e " [--no-sudo] ->> install without sudo"
 }
@@ -171,7 +171,7 @@ export INPUT_ARGUMENTS="${@}"
 set -u
 while [[ $# -gt 0 ]]; do
   case $1 in
-    '--version'|-v)
+    '--tag'|-t)
        TAG="${2}"
        shift
        ;;
