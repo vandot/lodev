@@ -1,13 +1,18 @@
-import std/[os, parseopt, strutils]
-import pkg/lodnspkg/[actions, server]
+import std/[os, parseopt, strutils, nativesockets]
+when not defined macosx:
+  import pkg/lodnspkg/[actions, server]
 import pkg/locertpkg/actions as certActions
 import threadpool
 import chronos
 
-import ./lodev/[proxy]
+import ./lodev/[proxy, httpserver]
 
-const tld = "lo"
+var tld = "lo"
+var domain = "dev"
 
+when defined macosx:
+  tld = "local"
+  domain = getHostname()
 
 proc writeVersion(): string =
   const NimblePkgVersion {.strdefine.} = "dev"
@@ -31,24 +36,28 @@ proc writeHelp() =
 proc main() =
   var
     start = false
-    dnsIp :string
-    dnsPort :int
     targetIp = "127.0.0.1"
     targetPort = Port(3000)
+  when not defined macosx:
+    var
+      dnsIp :string
+      dnsPort :int
 
   for kind, key, value in getOpt():
     case kind
     of cmdArgument:
       case key
       of "install":
-        (dnsIp, dnsPort) = actions.systemProbe()
-        certActions.installCA("dev." & tld, true)
-        actions.install(dnsIp, dnsPort, tld)
+        when not defined macosx:
+          (dnsIp, dnsPort) = actions.systemProbe()
+          actions.install(dnsIp, dnsPort, domain & "." & tld)
+        certActions.installCA(domain & "." & tld, true)
       of "start":
         start = true
       of "uninstall":
+        when not defined macosx:
+          actions.uninstall(domain & "." & tld)
         certActions.uninstallCA(true)
-        actions.uninstall(tld)
       else:
         echo "unknown argument: ", key
         writeHelp()
@@ -71,11 +80,14 @@ proc main() =
       discard
 
   if start:
-    (dnsIp, dnsPort) = actions.systemProbe()
-    var cert = certActions.getCert(true)
+    let cert = certActions.getCert(true)
+    let ca = os.splitPath(cert[0])[0] & "/locertCA.pem"
     let secureProxy = ProxyServer(targetHost: targetIp, targetPort: targetPort, serverIdent: writeVersion(), cert: cert)
     let proxyServer = createServer(secureProxy)
-    spawn server.serve(dnsIp, dnsPort, tld)
+    when not defined macosx:
+      (dnsIp, dnsPort) = actions.systemProbe()
+      spawn server.serve(dnsIp, dnsPort, domain & "." & tld)
+    spawn httpserver.serve(domain & "." & tld, ca)
     proxyServer.start()
     waitFor proxyServer.join()
     sync()

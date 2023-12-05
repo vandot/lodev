@@ -1,6 +1,6 @@
 # Package
 
-version       = "0.1.1"
+version       = "0.1.3"
 author        = "vandot"
 description   = "Simple reverse proxy server for local development"
 license       = "MIT"
@@ -16,7 +16,7 @@ skipDirs = @[
 # Dependencies
 requires "nim >= 1.6.6"
 requires "chronos"
-requires "lodns"
+requires "lodns >= 0.1.9"
 requires "locert"
 
 # Tasks
