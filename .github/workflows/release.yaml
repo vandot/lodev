@@ -14,7 +14,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Install Nim
-        uses: iffy/install-nim@v4.2.0
+        uses: iffy/install-nim@v5
+        with:
+          version: 1.6.10
       - name: Install nimxc
         run: |
           nimble install -y https://github.com/iffy/nimxc.git
