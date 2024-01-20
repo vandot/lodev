@@ -128,9 +128,7 @@ proc join*(rs: SecureProxyServerRef): Future[void] =
   rs.server.join()
 
 proc createServer*(proxy: ProxyServer): SecureProxyServerRef =
-  var address = initTAddress("127.0.0.1:443")
-  when defined macosx: # https://developer.apple.com/forums/thread/674179
-    address = initTAddress("0.0.0.0:443")
+  var address = initTAddress("0.0.0.0:443")
   let secureKey = TLSPrivateKey.init(readFile(proxy.cert[1]))
   let secureCert = TLSCertificate.init(readFile(proxy.cert[0]))
   let sres = SecureProxyServerRef.new(proxy, address, secureKey,
