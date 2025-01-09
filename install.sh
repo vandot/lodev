@@ -104,7 +104,7 @@ download_file() {
     APP_DIST="$APP_NAME-$OS-$ARCH.exe"
   fi
   DOWNLOAD_URL="$REPO_URL/releases/download/$TAG/$APP_DIST"
-  APP_TMP_ROOT="$(mktemp -dt $APP_NAME-binary)"
+  APP_TMP_ROOT="$(mktemp -dt $APP_NAME-binary.XXXXX)"
   APP_TMP_FILE="$APP_TMP_ROOT/$APP_DIST"
   if command -v curl &> /dev/null; then
     curl -SsL "$DOWNLOAD_URL" -o "$APP_TMP_FILE"
