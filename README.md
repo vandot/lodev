@@ -1,6 +1,9 @@
 # lodev
 lodev is a simple reverse proxy server for local development with SSL termination.
 
+> [!WARNING]
+> Archived! Superseded by [vandot/zlodev](https://github.com/vandot/zlodev)
+
 Obsoletes using ngrok or manually configuring combination of mkcert, dnsmasq and nginx/caddy. It provides HTTPS endpoint under `https://*.dev.lo` or `https://{COMPUTER_NAME}.local` and by default proxies all requests to `http://127.0.0.1:3000`.
 
 It uses [locert](https://github.com/vandot/locert) to generate and install locally trusted SSL certs and [lodns](https://github.com/vandot/lodns) for DNS name resolution.
